@@ -39,10 +39,6 @@ body {
   overflow-x: hidden;
 }
 
-body.nav-open {
-  overflow: hidden;
-}
-
 img {
   display: block;
   max-width: 100%;
@@ -129,12 +125,18 @@ a {
   backdrop-filter: blur(24px);
   background: rgba(4, 11, 21, 0.35);
   border-bottom: 1px solid transparent;
-  transition: background 180ms ease, border-color 180ms ease;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .topbar.scrolled {
   background: rgba(4, 11, 21, 0.68);
   border-color: var(--line);
+}
+
+.topbar.menu-open {
+  background: rgba(4, 11, 21, 0.88);
+  border-color: var(--line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
 }
 
 .topbar-inner {
@@ -273,9 +275,11 @@ a {
 }
 
 .mobile-nav {
-  position: fixed;
-  inset: 0;
-  z-index: 25;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 320ms ease, opacity 180ms ease;
 }
 
 .mobile-nav[hidden] {
@@ -283,33 +287,34 @@ a {
 }
 
 .mobile-nav-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(1, 7, 14, 0.68);
-  backdrop-filter: blur(12px);
+  display: none;
 }
 
 .mobile-nav-panel {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: min(420px, 100vw);
-  height: 100%;
+  width: var(--wrap);
+  margin: 0 auto 18px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: 22px;
-  border-left: 1px solid rgba(151, 198, 255, 0.16);
+  border: 1px solid rgba(151, 198, 255, 0.16);
+  border-top: 0;
+  border-radius: 0 0 24px 24px;
   background:
     radial-gradient(circle at top, rgba(126, 185, 255, 0.12), transparent 32%),
     linear-gradient(180deg, rgba(11, 25, 42, 0.96), rgba(4, 10, 19, 0.98));
-  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.32);
-  transform: translateX(100%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  transform: translateY(-10px);
   transition: transform 260ms ease;
 }
 
+.mobile-nav.is-open {
+  max-height: 70vh;
+  opacity: 1;
+}
+
 .mobile-nav.is-open .mobile-nav-panel {
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 .mobile-nav-head {
@@ -1163,6 +1168,10 @@ a {
   .topnav,
   .topbar-cta {
     display: none;
+  }
+
+  .topbar {
+    overflow: clip;
   }
 
   .menu-toggle {

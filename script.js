@@ -53,10 +53,11 @@ const setupActiveLinks = () => {
 };
 
 const setupMobileNav = () => {
+  const topbar = document.querySelector(".topbar");
   const toggleButton = document.querySelector(".menu-toggle");
   const mobileNav = document.querySelector(".mobile-nav");
 
-  if (!toggleButton || !mobileNav) {
+  if (!topbar || !toggleButton || !mobileNav) {
     return;
   }
 
@@ -66,12 +67,12 @@ const setupMobileNav = () => {
     toggleButton.setAttribute("aria-expanded", "false");
     toggleButton.setAttribute("aria-label", "메뉴 열기");
     mobileNav.classList.remove("is-open");
-    document.body.classList.remove("nav-open");
+    topbar.classList.remove("menu-open");
 
     window.clearTimeout(hideTimer);
     hideTimer = window.setTimeout(() => {
       mobileNav.hidden = true;
-    }, 260);
+    }, 320);
   };
 
   const openMenu = () => {
@@ -82,7 +83,7 @@ const setupMobileNav = () => {
       toggleButton.setAttribute("aria-expanded", "true");
       toggleButton.setAttribute("aria-label", "메뉴 닫기");
       mobileNav.classList.add("is-open");
-      document.body.classList.add("nav-open");
+      topbar.classList.add("menu-open");
     });
   };
 
@@ -105,6 +106,16 @@ const setupMobileNav = () => {
     if (event.key === "Escape" && toggleButton.getAttribute("aria-expanded") === "true") {
       closeMenu();
     }
+  });
+
+  document.addEventListener("click", (event) => {
+    const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+
+    if (!isExpanded || topbar.contains(event.target)) {
+      return;
+    }
+
+    closeMenu();
   });
 
   window.addEventListener("resize", () => {
